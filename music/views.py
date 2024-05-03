@@ -20,6 +20,14 @@ class ArtistsAPIView(APIView):
 
         return Response(data=serializer.data)
 
+    def post(self, request):
+        serializer = ArtistsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ArtistsDetailAPIView(APIView):
     def get(self, request, id):
@@ -62,6 +70,14 @@ class AlbumsAPIView(APIView):
         serializer = AlbumsSerializer(albums, many=True)
 
         return Response(data=serializer.data)
+
+    def post(self, request):
+        serializer = AlbumsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AlbumsDetailAPIView(APIView):
