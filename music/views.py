@@ -19,6 +19,14 @@ class ArtistsAPIView(APIView):
         return Response(data=serializer.data)
 
 
+class ArtistsDetailAPIView(APIView):
+    def get(self, request, id):
+        artist = Artist.objects.get(id=id)
+        serializer = ArtistsSerializer(artist)
+
+        return Response(data=serializer.data)
+
+
 class AlbumsAPIView(APIView):
     def get(self, request):
         albums = Album.objects.all()
@@ -27,9 +35,25 @@ class AlbumsAPIView(APIView):
         return Response(data=serializer.data)
 
 
+class AlbumsDetailAPIView(APIView):
+    def get(self, request, id):
+        album = Album.objects.get(id=id)
+        serializer = AlbumsSerializer(album)
+
+        return Response(data=serializer.data)
+
+
 class SongsAPIView(APIView):
     def get(self, request):
         songs = Song.objects.all()
         serializer = SongsSerializer(songs, many=True)
+
+        return Response(data=serializer.data)
+
+
+class SongsDetailAPIView(APIView):
+    def get(self, request, id):
+        song = Song.objects.get(id=id)
+        serializer = SongsSerializer(song)
 
         return Response(data=serializer.data)
