@@ -18,7 +18,7 @@ class AlbumsSerializer(serializers.ModelSerializer):
 
 
 class SongsSerializer(serializers.ModelSerializer):
-    album = AlbumsSerializer()
+    album = AlbumsSerializer(read_only=True)
 
     class Meta:
         model = Song

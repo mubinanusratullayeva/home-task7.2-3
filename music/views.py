@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Artist, Album, Song
 from .serializers import ArtistsSerializer, AlbumsSerializer, SongsSerializer
@@ -98,20 +99,6 @@ class AlbumsDetailAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class SongsAPIView(APIView):
-    def get(self, request):
-        try:
-            songs = Song.objects.all()
-            serializer = SongsSerializer(songs, many=True)
-
-            return Response(data=serializer.data)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-class SongsDetailAPIView(APIView):
-    def get(self, request, id):
-        song = Song.objects.get(id=id)
-        serializer = SongsSerializer(song)
-
-        return Response(data=serializer.data)
+class SongsAPIViewSet(ModelViewSet):
+    queryset = Song.objects.all()
+    serializer_class = SongsSerializer
