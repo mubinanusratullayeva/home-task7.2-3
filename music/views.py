@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 from .models import Artist, Album, Song
 from .serializers import ArtistsSerializer, AlbumsSerializer, SongsSerializer
@@ -118,3 +120,5 @@ class AlbumsDetailAPIView(APIView):
 class SongsAPIViewSet(ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongsSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )

@@ -1,6 +1,7 @@
 from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken import views
 
 from .views import (
     LandingPageAPIView,
@@ -22,5 +23,6 @@ urlpatterns = [
     path('artists/<int:id>/', ArtistsDetailAPIView.as_view(), name="artist-detail"),
     path('albums/', AlbumsAPIView.as_view(), name="albums"),
     path('albums/<int:id>/', AlbumsDetailAPIView.as_view(), name="album-detail"),
-    path('', include(routers.urls))
+    path('', include(routers.urls)),
+    path('auth/', views.obtain_auth_token)
 ]

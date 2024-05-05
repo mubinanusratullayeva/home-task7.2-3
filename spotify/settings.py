@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party packages
     'rest_framework',
+    'rest_framework.authtoken',
     # My apps
     'music',
 ]
