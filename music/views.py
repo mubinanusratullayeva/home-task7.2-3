@@ -17,7 +17,7 @@ class LandingPageAPIView(APIView):
 
 class ArtistsAPIViewSet(ModelViewSet):
     queryset = Artist.objects.all()
-    serializer_class = ArtistSerializer
+    serializer_class = ArtistsSerializer
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
@@ -91,7 +91,7 @@ class ArtistsAPIViewSet(ModelViewSet):
 
 class AlbumsAPIViewSet(ModelViewSet):
     queryset = Album.objects.all()
-    serializer_class = AlbumSerializer
+    serializer_class = AlbumsSerializer
     permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
