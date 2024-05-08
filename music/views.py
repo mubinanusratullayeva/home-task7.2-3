@@ -95,7 +95,9 @@ class ArtistsAPIViewSet(ModelViewSet):
 class AlbumsAPIViewSet(ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumsSerializer
-    permission_classes = (IsAuthenticated, )
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('title', 'album__title', 'album__artist__title', )
+    # permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
 
@@ -137,5 +139,7 @@ class AlbumsAPIViewSet(ModelViewSet):
 class SongsAPIViewSet(ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongsSerializer
-    permission_classes = (IsAuthenticated, )
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('title', 'album__title', 'album__artist__title', )
+    # permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
