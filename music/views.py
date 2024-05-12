@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
@@ -143,3 +144,10 @@ class SongsAPIViewSet(ModelViewSet):
     search_fields = ('title', 'album__title', 'album__artist__title', )
     # permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
+
+    @action (detail=True, methods=['GET'])
+    def listen(self, request, *args, **kwargs):
+        song = self.get_object()
+        song.listened += 1
+        song.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
