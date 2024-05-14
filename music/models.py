@@ -22,6 +22,7 @@ class Song(models.Model):
     cover = models.URLField()
     album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True)
     listened = models.PositiveBigIntegerField(default=0)
+    like = models.PositiveBigIntegerField(default=0)
     last_updated = models.DateField(auto_now=True)
     create_date = models.DateField(auto_now_add=True)
 

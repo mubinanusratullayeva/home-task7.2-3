@@ -174,3 +174,10 @@ class SongsAPIViewSet(ModelViewSet):
         artist = song.album.artist
         serializer = ArtistsSerializer(artist)
         return Response(data=serializer.data)
+
+    @action(detail=True, methods=['POST'])
+    def like(self, request, *args, **kwargs):
+        songs = self.get_object()
+        songs.like += 1
+        songs.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
