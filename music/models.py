@@ -5,6 +5,7 @@ from django.db import models
 class Artist(models.Model):
     name = models.CharField(max_length=70)
     image = models.URLField()
+    like = models.PositiveBigIntegerField(default=0)
     last_updated = models.DateField(auto_now=True)
     create_date = models.DateField(auto_now_add=True)
 

@@ -26,6 +26,13 @@ class ArtistsAPIViewSet(ModelViewSet):
     # permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication,)
 
+    @action(detail=True, methods=['POST'])
+    def like(self, request, *args, **kwargs):
+        artists = self.get_object()
+        artists.like += 1
+        artists.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # class ArtistsAPIView(APIView):
 #     def get(self, request):
