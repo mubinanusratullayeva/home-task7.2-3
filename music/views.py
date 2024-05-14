@@ -33,6 +33,14 @@ class ArtistsAPIViewSet(ModelViewSet):
         artists.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False, methods=['POST'])
+    def top(self, request, *args, **kwargs):
+        artists = self.get_queryset()
+        artists = artists.order_by('-like')[:5]
+        serializer = ArtistsSerializer(artists, many=True)
+
+        return Response(data=serializer.data)
+
 
 # class ArtistsAPIView(APIView):
 #     def get(self, request):
