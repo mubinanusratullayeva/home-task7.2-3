@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from django.db import transaction
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
@@ -20,10 +21,10 @@ class LandingPageAPIView(APIView):
 class ArtistsAPIViewSet(ModelViewSet):
     queryset = Artist.objects.all()
     serializer_class = ArtistsSerializer
-    filter_backends = (filters.SearchFilter, )
-    search_fields = ('name', )
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
     # permission_classes = (IsAuthenticated, )
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
 
 
 # class ArtistsAPIView(APIView):
@@ -96,10 +97,10 @@ class ArtistsAPIViewSet(ModelViewSet):
 class AlbumsAPIViewSet(ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumsSerializer
-    filter_backends = (filters.SearchFilter, )
-    search_fields = ('title', 'album__title', 'album__artist__title', )
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'album__title', 'album__artist__title',)
     # permission_classes = (IsAuthenticated, )
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
 
 
 # class AlbumsDetailAPIView(APIView):
@@ -140,14 +141,36 @@ class AlbumsAPIViewSet(ModelViewSet):
 class SongsAPIViewSet(ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongsSerializer
-    filter_backends = (filters.SearchFilter, )
-    search_fields = ('title', 'album__title', 'album__artist__title', )
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'album__title', 'album__artist__title',)
     # permission_classes = (IsAuthenticated, )
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
 
-    @action (detail=True, methods=['GET'])
+    @transaction.atomic
+    @action(detail=True, methods=['POST'])
     def listen(self, request, *args, **kwargs):
         song = self.get_object()
         song.listened += 1
         song.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['GET'])
+    def top(self, request, *args, **kwargs):
+        songs = self.get_queryset()
+        songs = songs.order_by('-listened')[:3]
+        serializer = SongsSerializer(songs, many=True)
+        return Response(data=serializer.data)
+
+    @action(detail=True, methods=['POST'])
+    def album(self, request, *args, **kwargs):
+        song = self.get_object()
+        album = song.album
+        serializer = AlbumsSerializer(album)
+        return Response(data=serializer.data)
+
+    @action(detail=True, methods=['POST'])
+    def artist(self, request, *args, **kwargs):
+        song = self.get_object()
+        artist = song.album.artist
+        serializer = ArtistsSerializer(artist)
+        return Response(data=serializer.data)
