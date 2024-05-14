@@ -102,6 +102,13 @@ class AlbumsAPIViewSet(ModelViewSet):
     # permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication,)
 
+    @action(detail=True, methods=['Get'])
+    def artist(self, request, *args, **kwargs):
+        albums = self.get_object()
+        artist = albums.artist
+        serializer = ArtistsSerializer(artist)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # class AlbumsDetailAPIView(APIView):
 #     def get(self, request, id):
@@ -175,6 +182,7 @@ class SongsAPIViewSet(ModelViewSet):
         serializer = ArtistsSerializer(artist)
         return Response(data=serializer.data)
 
+    @transaction.atomic
     @action(detail=True, methods=['POST'])
     def like(self, request, *args, **kwargs):
         songs = self.get_object()
